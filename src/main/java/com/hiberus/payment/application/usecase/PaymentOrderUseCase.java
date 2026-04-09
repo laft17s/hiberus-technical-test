@@ -27,7 +27,7 @@ public class PaymentOrderUseCase {
                         return Mono.error(new IdempotencyException("Payment Order with external reference " 
                             + paymentOrder.getExternalReference() + " already exists"));
                     }
-                    paymentOrder.setPaymentOrderId("PO-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
+                    paymentOrder.setPaymentOrderId("PO-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase(java.util.Locale.ROOT));
                     paymentOrder.setStatus(com.hiberus.payment.domain.model.PaymentOrderStatus.PENDING);
                     paymentOrder.setLastUpdate(LocalDateTime.now());
                     return paymentOrderRepository.save(paymentOrder);
