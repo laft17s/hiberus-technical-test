@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Ignore generated classes from OpenAPI -->
+    <Match>
+        <Package name="~com\.hiberus\.payment\.infrastructure\.entrypoints\.rest\.dto.*"/>
+    </Match>
+    <Match>
+        <Package name="~com\.hiberus\.payment\.infrastructure\.entrypoints\.rest\.api.*"/>
+    </Match>
+</FindBugsFilter>
