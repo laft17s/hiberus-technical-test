@@ -1,0 +1,48 @@
+# =============================================================================
+# application.yml.template - PLANTILLA DE CONFIGURACIÓN
+# 
+# Copia este archivo como 'application.yml' en el mismo directorio
+# y sustituye los valores marcados con <PLACEHOLDER> con los reales.
+#
+# NUNCA subas application.yml con credenciales reales al repositorio.
+# application.yml está en .gitignore.
+#
+# En GCP (Cloud Run) y CI/CD (GitHub Actions), los valores se inyectan
+# como variables de entorno o secrets — NO se usan este archivo directamente.
+# =============================================================================
+
+spring:
+  application:
+    name: payment-order-service
+
+  r2dbc:
+    url: r2dbc:postgresql://<DB_HOST>:<DB_PORT>/<DB_NAME>
+    username: <DB_USER>
+    password: <DB_PASSWORD>
+    pool:
+      initial-size: 5
+      max-size: 20
+
+  flyway:
+    url: jdbc:postgresql://<DB_HOST>:<DB_PORT>/<DB_NAME>
+    user: <DB_USER>
+    password: <DB_PASSWORD>
+    enabled: true
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true

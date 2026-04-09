@@ -53,3 +53,19 @@ build/
 /docker-compose.yml
 /Dockerfile
 /test.js
+
+### Application Configuration Secrets ###
+# Las plantillas (*.template) SÍ se suben al repo.
+# Los archivos reales con credenciales NO.
+src/main/resources/application.yml
+src/main/resources/application-*.yml
+# El application.yml de TEST sí se sube (usa valores dummy/testcontainers)
+!src/test/resources/application.yml
+
+### Infrastructure Secrets ###
+infrastructure/terraform/sa-key.json
+infrastructure/terraform/terraform.tfvars
+infrastructure/terraform/.terraform/
+infrastructure/terraform/*.tfstate
+infrastructure/terraform/*.tfstate.backup
+infrastructure/terraform/.terraform.lock.hcl

@@ -1,0 +1,44 @@
+# =============================================================================
+# application.yml - TEST ENVIRONMENT
+# Este archivo configura el contexto de test con Testcontainers (PostgreSQL efímero).
+# Las propiedades de conexión son sobreescritas por @DynamicPropertySource en los tests.
+#
+# IMPORTANTE: Esta plantilla es segura para commitear.
+# El archivo con credenciales reales NO debe subirse al repositorio.
+# =============================================================================
+
+spring:
+  application:
+    name: payment-order-service
+
+  r2dbc:
+    # Sobreescrito dinámicamente por @DynamicPropertySource en PaymentOrderApiIntegrationTest
+    url: r2dbc:postgresql://localhost:5432/test
+    username: test
+    password: test
+
+  flyway:
+    # Flyway deshabilitado en tests — el schema se aplica vía schema.sql de Spring R2DBC
+    enabled: false
+
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 0  # Puerto aleatorio para evitar conflictos entre tests paralelos
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    com.hiberus.payment: DEBUG
+    org.springframework.r2dbc: DEBUG

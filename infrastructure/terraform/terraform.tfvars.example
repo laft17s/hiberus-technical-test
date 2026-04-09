@@ -1,0 +1,7 @@
+# Copia este archivo a terraform.tfvars y rellena tus valores reales
+# NOTA: terraform.tfvars está en .gitignore para evitar exponer datos sensibles
+
+project_id      = "hiberus-payment-api-XXXXX"
+region          = "us-central1"
+app_image       = "us-central1-docker.pkg.dev/hiberus-payment-api-XXXXX/hiberus-payment/hiberus-payment-api:latest"
+tf_state_bucket = "hiberus-payment-api-XXXXX-tf-state"

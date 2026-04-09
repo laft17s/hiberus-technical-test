@@ -1,20 +1,28 @@
 spring:
   application:
     name: payment-order-service
+
   r2dbc:
-    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:paymentdb}
-    username: ${DB_USER:admin}
-    password: ${DB_PASSWORD:admin}
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://localhost:5432/paymentdb}
+    username: ${SPRING_R2DBC_USERNAME:admin}
+    password: ${SPRING_R2DBC_PASSWORD:admin}
     pool:
       initial-size: 5
       max-size: 20
+
+  flyway:
+    url: ${SPRING_FLYWAY_URL:jdbc:postgresql://localhost:5432/paymentdb}
+    user: ${SPRING_FLYWAY_USER:admin}
+    password: ${SPRING_FLYWAY_PASSWORD:admin}
+    enabled: ${SPRING_FLYWAY_ENABLED:true}
+
   sql:
     init:
       mode: always
       schema-locations: classpath:schema.sql
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 management:
   endpoints:
