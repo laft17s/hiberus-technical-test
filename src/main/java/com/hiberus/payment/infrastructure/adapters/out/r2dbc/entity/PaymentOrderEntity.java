@@ -8,8 +8,15 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.annotation.Transient;
+
 @Table("payment_orders")
-public class PaymentOrderEntity {
+public class PaymentOrderEntity implements Persistable<String> {
+    
+    @Transient
+    private boolean isNew = true;
+
     @Id
     @Column("payment_order_id")
     private String paymentOrderId;
@@ -68,4 +75,18 @@ public class PaymentOrderEntity {
 
     public LocalDateTime getLastUpdate() { return lastUpdate; }
     public void setLastUpdate(LocalDateTime lastUpdate) { this.lastUpdate = lastUpdate; }
+
+    @Override
+    public boolean isNew() {
+        return this.isNew;
+    }
+
+    public void setNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+
+    @Override
+    public String getId() {
+        return paymentOrderId;
+    }
 }

@@ -49,6 +49,6 @@ class PaymentOrderRestMapperTest {
         PaymentOrderStatusResponse response = mapper.toStatusResponse(domain);
         assertThat(response.getPaymentOrderId()).isEqualTo("PO-3");
         assertThat(response.getStatus()).isEqualTo("ACCEPTED");
-        assertThat(response.getLastUpdate()).isEqualTo("2025-01-01T10:00:00");
+        assertThat(response.getLastUpdate()).isEqualTo("2025-01-01T10:00:00Z");
     }
 }

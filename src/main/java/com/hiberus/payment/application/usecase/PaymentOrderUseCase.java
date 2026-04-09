@@ -5,6 +5,7 @@ import com.hiberus.payment.domain.exception.PaymentOrderNotFoundException;
 import com.hiberus.payment.domain.model.PaymentOrder;
 import com.hiberus.payment.domain.repository.PaymentOrderRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -40,5 +41,9 @@ public class PaymentOrderUseCase {
 
     public Mono<PaymentOrder> retrievePaymentOrderStatus(String paymentOrderId) {
         return retrievePaymentOrder(paymentOrderId); // Returns the whole order, adapter can map just the status
+    }
+
+    public Flux<PaymentOrder> retrieveAllPaymentOrders() {
+        return paymentOrderRepository.findAll();
     }
 }

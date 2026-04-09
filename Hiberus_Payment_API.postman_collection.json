@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "cdefab12-3456-7890-abcd-ef1234567890",
+		"name": "Hiberus - Payment Initiation API",
+		"description": "Postman Collection for the BIAN aligned Payment Initiation API (Technical Test).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Initiate Payment Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"externalReference\": \"EXT-12345\",\n  \"debtorAccount\": {\n    \"iban\": \"ES12345678901234567890\"\n  },\n  \"creditorAccount\": {\n    \"iban\": \"ES09876543210987654321\"\n  },\n  \"instructedAmount\": {\n    \"amount\": 1500.50,\n    \"currency\": \"EUR\"\n  },\n  \"remittanceInformation\": \"Pago de servicios\",\n  \"requestedExecutionDate\": \"2026-10-31\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/payment-initiation/payment-orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payment-initiation",
+						"payment-orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Retrieve Payment Order",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/payment-initiation/payment-orders/{{paymentOrderId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payment-initiation",
+						"payment-orders",
+						"{{paymentOrderId}}"
+					]
+				},
+				"description": "Reemplaza {{paymentOrderId}} con el ID generado en el POST (Ej: PO-2BFEA25D)"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Retrieve Payment Order Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/payment-initiation/payment-orders/{{paymentOrderId}}/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payment-initiation",
+						"payment-orders",
+						"{{paymentOrderId}}",
+						"status"
+					]
+				},
+				"description": "Reemplaza {{paymentOrderId}} con el ID generado en el POST (Ej: PO-2BFEA25D)"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Retrieve All Payment Orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/payment-initiation/payment-orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payment-initiation",
+						"payment-orders"
+					]
+				},
+				"description": "Recupera todas las ordenes de pago del sistema."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "paymentOrderId",
+			"value": "PONER_AQUI_EL_ID_GENERADO"
+		}
+	]
+}

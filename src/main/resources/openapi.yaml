@@ -12,6 +12,18 @@ tags:
 
 paths:
   /payment-initiation/payment-orders:
+    get:
+      summary: Retrieve all Payment Orders
+      operationId: retrieveAllPaymentOrders
+      tags:
+        - PaymentOrder
+      responses:
+        '200':
+          description: A list of all Payment Orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponsePaymentOrderList'
     post:
       summary: Initiate a Payment Order
       operationId: initiatePaymentOrder
@@ -30,13 +42,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentOrderResponse'
+                $ref: '#/components/schemas/ApiResponsePaymentOrder'
         '400':
           description: Bad Request (Invalid data)
           content:
-            application/problem+json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetail'
+                $ref: '#/components/schemas/ApiResponse'
 
   /payment-initiation/payment-orders/{id}:
     get:
@@ -56,13 +68,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentOrderResponse'
+                $ref: '#/components/schemas/ApiResponsePaymentOrder'
         '404':
           description: Payment Order not found
           content:
-            application/problem+json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetail'
+                $ref: '#/components/schemas/ApiResponse'
 
   /payment-initiation/payment-orders/{id}/status:
     get:
@@ -82,13 +94,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentOrderStatusResponse'
+                $ref: '#/components/schemas/ApiResponsePaymentOrderStatus'
         '404':
           description: Payment Order not found
           content:
-            application/problem+json:
+            application/json:
               schema:
-                $ref: '#/components/schemas/ProblemDetail'
+                $ref: '#/components/schemas/ApiResponse'
 
 components:
   schemas:
@@ -168,16 +180,64 @@ components:
           type: string
           format: date-time
 
-    ProblemDetail:
+    ApiResponse:
       type: object
       properties:
-        type:
-          type: string
-        title:
-          type: string
-        status:
+        code:
           type: integer
-        detail:
+          example: 1
+        status:
           type: string
-        instance:
+          example: SUCCESS
+        message:
           type: string
+          example: Payment order retrieved successfully
+        data:
+          type: object
+
+    ApiResponsePaymentOrder:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        status:
+          type: string
+          example: SUCCESS
+        message:
+          type: string
+          example: Payment order retrieved successfully
+        data:
+          $ref: '#/components/schemas/PaymentOrderResponse'
+
+    ApiResponsePaymentOrderStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        status:
+          type: string
+          example: SUCCESS
+        message:
+          type: string
+          example: Payment order status retrieved successfully
+        data:
+          $ref: '#/components/schemas/PaymentOrderStatusResponse'
+
+    ApiResponsePaymentOrderList:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 1
+        status:
+          type: string
+          example: SUCCESS
+        message:
+          type: string
+          example: Payment order list retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentOrderResponse'

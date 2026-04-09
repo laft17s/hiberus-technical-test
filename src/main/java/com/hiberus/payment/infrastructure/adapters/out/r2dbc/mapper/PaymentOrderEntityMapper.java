@@ -5,6 +5,7 @@ import com.hiberus.payment.domain.model.Money;
 import com.hiberus.payment.domain.model.PaymentOrder;
 import com.hiberus.payment.domain.model.PaymentOrderStatus;
 import com.hiberus.payment.infrastructure.adapters.out.r2dbc.entity.PaymentOrderEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 @Component
 public class PaymentOrderEntityMapper {
 
+    @NonNull
     public PaymentOrderEntity toEntity(PaymentOrder domain) {
         PaymentOrderEntity entity = new PaymentOrderEntity();
         entity.setPaymentOrderId(domain.getPaymentOrderId());
@@ -39,6 +41,7 @@ public class PaymentOrderEntityMapper {
         return entity;
     }
 
+    @NonNull
     public PaymentOrder toDomain(PaymentOrderEntity entity) {
         return new PaymentOrder(
                 entity.getPaymentOrderId(),

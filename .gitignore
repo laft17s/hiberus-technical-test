@@ -52,3 +52,4 @@ build/
 /resources/
 /docker-compose.yml
 /Dockerfile
+/test.js
