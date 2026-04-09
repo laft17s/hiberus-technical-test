@@ -48,7 +48,7 @@ build/
 /ai/logs/
 
 ### Hiberus Custom Rules ###
-.agent/
-resources/
-docker-compose.yml
-Dockerfile
+/.agent/
+/resources/
+/docker-compose.yml
+/Dockerfile

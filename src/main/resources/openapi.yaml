@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Payment Initiation REST API
+  description: Microservice for PaymentOrder BIAN alignment, migrating legacy SOAP Service.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+    description: Local Server
+tags:
+  - name: PaymentOrder
+    description: Payment Order Operations
+
+paths:
+  /payment-initiation/payment-orders:
+    post:
+      summary: Initiate a Payment Order
+      operationId: initiatePaymentOrder
+      tags:
+        - PaymentOrder
+      requestBody:
+        description: Request payload for new Payment Order
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiatePaymentOrderRequest'
+      responses:
+        '201':
+          description: Initiated gracefully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentOrderResponse'
+        '400':
+          description: Bad Request (Invalid data)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+  /payment-initiation/payment-orders/{id}:
+    get:
+      summary: Retrieve Payment Order
+      operationId: retrievePaymentOrder
+      tags:
+        - PaymentOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentOrderResponse'
+        '404':
+          description: Payment Order not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+  /payment-initiation/payment-orders/{id}/status:
+    get:
+      summary: Retrieve Payment Order Status
+      operationId: retrievePaymentOrderStatus
+      tags:
+        - PaymentOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment order status details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentOrderStatusResponse'
+        '404':
+          description: Payment Order not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+
+components:
+  schemas:
+    AccountIdentifier:
+      type: object
+      required:
+        - iban
+      properties:
+        iban:
+          type: string
+          example: EC12DEBTOR
+
+    MoneyAmount:
+      type: object
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 150.75
+        currency:
+          type: string
+          example: USD
+
+    InitiatePaymentOrderRequest:
+      type: object
+      required:
+        - externalReference
+        - debtorAccount
+        - creditorAccount
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        externalReference:
+          type: string
+          example: EXT-1
+        debtorAccount:
+          $ref: '#/components/schemas/AccountIdentifier'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountIdentifier'
+        instructedAmount:
+          $ref: '#/components/schemas/MoneyAmount'
+        remittanceInformation:
+          type: string
+          example: Factura 001-123
+        requestedExecutionDate:
+          type: string
+          format: date
+          example: '2025-10-31'
+
+    PaymentOrderResponse:
+      type: object
+      properties:
+        paymentOrderId:
+          type: string
+          example: PO-0001
+        externalReference:
+          type: string
+          example: EXT-1
+        status:
+          type: string
+          example: PENDING
+      # Ideally we would map all fields inside response, but following legacy WSDL response format
+
+    PaymentOrderStatusResponse:
+      type: object
+      properties:
+        paymentOrderId:
+          type: string
+          example: PO-0001
+        status:
+          type: string
+          example: ACCEPTED
+        lastUpdate:
+          type: string
+          format: date-time
+
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
