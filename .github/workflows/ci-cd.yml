@@ -77,7 +77,7 @@ jobs:
         run: mvn clean package -DskipTests
         
       - name: Build Docker Container Image
-        run: docker build -t hiberus-payment-api:${{ github.sha }} .
+        run: docker build -f Dockerfile.template -t hiberus-payment-api:${{ github.sha }} .
         
       - name: Authenticate to Container Registry (Placeholder)
         # Uncomment and configure with appropriate registry secrets
