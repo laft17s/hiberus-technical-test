@@ -2,7 +2,6 @@ package com.hiberus.payment.infrastructure.entrypoints.rest.mapper;
 
 import com.hiberus.payment.domain.model.PaymentOrder;
 import com.hiberus.payment.domain.model.PaymentOrderStatus;
-import com.hiberus.payment.infrastructure.entrypoints.rest.dto.AccountIdentifier;
 import com.hiberus.payment.infrastructure.entrypoints.rest.dto.InitiatePaymentOrderRequest;
 import com.hiberus.payment.infrastructure.entrypoints.rest.dto.MoneyAmount;
 import com.hiberus.payment.infrastructure.entrypoints.rest.dto.PaymentOrderResponse;

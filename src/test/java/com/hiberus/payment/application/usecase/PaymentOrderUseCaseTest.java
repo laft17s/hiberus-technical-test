@@ -2,7 +2,6 @@ package com.hiberus.payment.application.usecase;
 
 import com.hiberus.payment.domain.exception.IdempotencyException;
 import com.hiberus.payment.domain.exception.PaymentOrderNotFoundException;
-import com.hiberus.payment.domain.model.AccountIdentifier;
 import com.hiberus.payment.domain.model.Money;
 import com.hiberus.payment.domain.model.PaymentOrder;
 import com.hiberus.payment.domain.model.PaymentOrderStatus;
@@ -14,9 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;

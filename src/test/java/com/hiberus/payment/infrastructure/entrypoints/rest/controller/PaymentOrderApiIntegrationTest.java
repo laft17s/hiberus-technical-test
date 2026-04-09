@@ -16,6 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
+@SuppressWarnings("null")
 class PaymentOrderApiIntegrationTest {
 
     @Container
@@ -43,7 +44,7 @@ class PaymentOrderApiIntegrationTest {
                 .requestedExecutionDate(java.time.LocalDate.parse("2025-10-31"));
 
         // 1. Initiate 
-        String paymentOrderId = webTestClient.post()
+        byte[] responseBody = webTestClient.post()
                 .uri("/payment-initiation/payment-orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
@@ -56,10 +57,22 @@ class PaymentOrderApiIntegrationTest {
                 .jsonPath("$.data.status").isEqualTo("PENDING")
                 .jsonPath("$.data.externalReference").isEqualTo("EXT-1001")
                 .returnResult()
-                .getResponseBody()
-                .toString();
+                .getResponseBody();
 
-        // Regex or parsing would be needed to get exact ID, but let's just assert existence for creation mapping
+        // Extraer el ID crudo usando JsonPath para no ensuciar con dependencias directas de deserialización
+        String jsonResponse = new String(responseBody != null ? responseBody : new byte[0], java.nio.charset.StandardCharsets.UTF_8);
+        String paymentOrderId = com.jayway.jsonpath.JsonPath.parse(jsonResponse).read("$.data.paymentOrderId", String.class);
+
+        // 2. Retrieve it
+        webTestClient.get()
+                .uri("/payment-initiation/payment-orders/" + paymentOrderId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.code").isEqualTo(1)
+                .jsonPath("$.status").isEqualTo("SUCCESS")
+                .jsonPath("$.data.paymentOrderId").isEqualTo(paymentOrderId)
+                .jsonPath("$.data.externalReference").isEqualTo("EXT-1001");
     }
 
     @Test
@@ -72,6 +85,39 @@ class PaymentOrderApiIntegrationTest {
                 .requestedExecutionDate(java.time.LocalDate.parse("2026-01-01"));
 
         webTestClient.post().uri("/payment-initiation/payment-orders").bodyValue(request).exchange().expectStatus().isCreated();
-        webTestClient.post().uri("/payment-initiation/payment-orders").bodyValue(request).exchange().expectStatus().isBadRequest();
+        webTestClient.post().uri("/payment-initiation/payment-orders").bodyValue(request).exchange().expectStatus().isBadRequest()
+                .expectBody().jsonPath("$.code").isEqualTo(-1).jsonPath("$.status").isEqualTo("ERROR")
+                .jsonPath("$.message").isEqualTo("Invalid request payload or parameters");
+    }
+
+    @Test
+    void shouldRetrieveAllPaymentOrders() {
+        webTestClient.get().uri("/payment-initiation/payment-orders")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.code").isEqualTo(1)
+                .jsonPath("$.status").isEqualTo("SUCCESS")
+                .jsonPath("$.data").isArray();
+    }
+
+    @Test
+    void shouldReturnNotFoundForInvalidId() {
+        webTestClient.get().uri("/payment-initiation/payment-orders/INVALID-ID")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("$.code").isEqualTo(-1)
+                .jsonPath("$.status").isEqualTo("ERROR")
+                .jsonPath("$.message").isEqualTo("Resource not found");
+    }
+
+    @Test
+    void shouldReturnNotFoundStatusForInvalidId() {
+        webTestClient.get().uri("/payment-initiation/payment-orders/INVALID-ID/status")
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody()
+                .jsonPath("$.code").isEqualTo(-1);
     }
 }
