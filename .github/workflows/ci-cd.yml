@@ -47,7 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # We run verify skipping tests to only trigger the reporting/linting plugins based on previous test runs
-        run: mvn verify sonar:sonar -DskipTests -Dsonar.projectKey=hiberus-payment-api
+        run: mvn verify -DskipTests
         
       - name: Upload JaCoCo Coverage Report
         uses: actions/upload-artifact@v4
