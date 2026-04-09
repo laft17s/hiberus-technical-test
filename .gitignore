@@ -63,9 +63,4 @@ src/main/resources/application-*.yml
 !src/test/resources/application.yml
 
 ### Infrastructure Secrets ###
-infrastructure/terraform/sa-key.json
-infrastructure/terraform/terraform.tfvars
-infrastructure/terraform/.terraform/
-infrastructure/terraform/*.tfstate
-infrastructure/terraform/*.tfstate.backup
-infrastructure/terraform/.terraform.lock.hcl
+infrastructure/
